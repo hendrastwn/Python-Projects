@@ -22,6 +22,24 @@ for out in outs:
             confidences.append(float(confidence))
             class_ids.append(class_id)
 
+            #Load YOLO Algorithms\
+net=cv2.dnn.readNet("yolov3.weights","yolov3.cfg")
+
+
+#To load all objects that have to be detected
+classes=[]
+with open("coco.names","r") as f:
+    read=f.readlines()
+for i in range(len(read)):
+    classes.append(read[i].strip("\n"))
+
+
+#Defining layer names
+layer_names=net.getLayerNames()
+output_layers=[]
+for i in net.getUnconnectedOutLayers():
+    output_layers.append(layer_names[i[0]-1])
+            
 # Index Open Source Computer Vision Library
 indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
 print(indexes)
